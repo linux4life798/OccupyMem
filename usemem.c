@@ -1,4 +1,5 @@
-/**
+/** Very quick program to reserve large portitons of memory
+ *   -More for the concept
  * @author Craig Hesling
  * @date 11/22/2013
  */
@@ -16,10 +17,10 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #ifdef METHOD_MMAP
 	#include <sys/mman.h>
 #endif
-#include <fcntl.h>
 
 /* Windows doesn't have mmap - use malloc */
 //#define METHOD_MMAP
@@ -59,7 +60,7 @@ void returnmemory(char *start, size_t size)
 }
 
 /* Write random values to the 'size' elements in the array starting at 'start' */
-void writecrap(char *start, size_t size)
+void writestuff(char *start, size_t size)
 {
 	size_t i;
 	printf("# Writing %lu bytes of random crap to memory!\n", (long unsigned int)size);
@@ -71,9 +72,7 @@ void writecrap(char *start, size_t size)
 
 
 
-
-
-
+/* first argument(optional) specifies size in GB to reserve */
 int main(int argc, char *argv[])
 {
 	size_t size_gb = 1;
@@ -93,15 +92,15 @@ int main(int argc, char *argv[])
 	start = reservememory(total_size);
 
 	printf("# Just to make sure the kernel is listening, we will write stuff to our entire region of memory\n");
-	writecrap(start, total_size);
+	writestuff(start, total_size);
 
 	printf("# Alright! I setup in vmemory space from %p to %p\n", start, start + total_size - 1);
 
 	while(1){
 		char c = 0;
-		printf("Should I try to write random crap to it again(y/n)? ");
+		printf("Should I try to write random stuff to it again(y/n)? ");
 		scanf(" %c", &c);
-		if(c == 'y') writecrap(start, total_size);
+		if(c == 'y') writestuff(start, total_size);
 		else break;
 	}
 	returnmemory(start, total_size);
