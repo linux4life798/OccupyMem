@@ -34,10 +34,16 @@ char *reservememory(size_t size)
 	
 #if defined (METHOD_MMAP)
 	start = (char *) mmap(NULL, size, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_NORESERVE, -1, 0);
-	if(start == MAP_FAILED) perror("mmap failed");
+	if(start == MAP_FAILED) {
+		perror("mmap failed");
+		exit(1);
+	}
 #elif defined (METHOD_MALLOC)
 	start = (char *) malloc(size);
-	if(start == NULL) perror("malloc failed");
+	if(start == NULL) {
+		perror("malloc failed");
+		exit(1);
+	}
 #else
 	#error
 #endif
